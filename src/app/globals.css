@@ -1,26 +1,458 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--brand, #cdde54);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: #cdde54;
+  color: #22201f;
+}
+
+/* قيم احتياطية للوضع الفاتح */
+.tapko-profile {
+  --page: #f5f5f0;
+  --surface: #ffffff;
+  --tile: #fcfcfa;
+  --tile-hover: #ffffff;
+  --text: #242421;
+  --muted: #78716c;
+  --border: #e7e5e4;
+}
+
+/* قيم احتياطية للوضع الداكن */
+.tapko-profile[data-theme="dark"] {
+  --page: #111214;
+  --surface: #1b1d20;
+  --tile: #25272b;
+  --tile-hover: #303238;
+  --text: #f3f3ef;
+  --muted: #b4b6bd;
+  --border: #34363c;
+
+  color-scheme: dark;
+}
+
+/* خلفية الصفحة */
+.tapko-profile[data-theme] {
+  background-color: var(--page);
+  color: var(--text);
+}
+
+.tapko-profile[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* الصفحة ونافذة الدفع */
+.tapko-profile[data-theme] :is(article, dialog) {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* الكروت وخلفيات بيانات الدفع */
+.tapko-profile[data-theme] :is(.bg-\[\#FCFCFA\], .bg-stone-50, .bg-stone-100) {
+  background-color: var(--tile);
+}
+
+/* النصوص الرئيسية */
+.tapko-profile[data-theme]
+  :is(.text-stone-700, .text-stone-800, .text-stone-900) {
+  color: var(--text);
+}
+
+/* النصوص الثانوية */
+.tapko-profile[data-theme]
+  :is(.text-stone-400, .text-stone-500, .text-stone-600) {
+  color: var(--muted);
+}
+
+/* الحدود والفواصل */
+.tapko-profile[data-theme] :is(.border-stone-100, .border-stone-200, article) {
+  border-color: var(--border);
+}
+
+/* أزرار التحكم فوق الغلاف */
+.tapko-profile[data-theme] .bg-white\/95 {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* إطار البروفايل؛ خلفية الصورة تفضل بيضاء */
+.tapko-profile[data-theme] .border-white {
+  border-color: var(--surface);
+}
+
+/* الهوفر */
+@media (hover: hover) {
+  .tapko-profile[data-theme] :is(.hover\:bg-white, .hover\:bg-stone-200):hover {
+    background-color: var(--tile-hover);
+  }
+
+  .tapko-profile[data-theme] .hover\:border-stone-300:hover {
+    border-color: var(--muted);
+  }
+}
+
+/* انتقال الألوان */
+.tapko-profile,
+.tapko-profile :is(article, dialog, a, button, p, span, div) {
+  transition-property:
+    background-color, color, border-color, box-shadow, transform;
+  transition-duration: 180ms;
+  transition-timing-function: ease;
+}
+
+/* تقليل الحركة حسب إعدادات الجهاز */
+@media (prefers-reduced-motion: reduce) {
+  .tapko-profile,
+  .tapko-profile * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+.tapko-profile summary:focus-visible {
+  outline: 3px solid var(--brand, #cdde54);
+  outline-offset: 4px;
+}
+/* =========================
+   Tapko Admin — Theme
+   ========================= */
+
+.tapko-admin {
+  --admin-bg: #f5f6f1;
+  --admin-panel: #ffffff;
+  --admin-header: rgba(255, 255, 255, 0.82);
+  --admin-input: #f7f8f4;
+  --admin-text: #252620;
+  --admin-muted: #73766b;
+  --admin-border: #e4e7dc;
+  --admin-accent: #849225;
+  --admin-soft: #f2f5e5;
+  --admin-glow-a: rgba(175, 194, 85, 0.15);
+  --admin-glow-b: rgba(105, 150, 139, 0.09);
+
+  position: relative;
+  isolation: isolate;
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  color-scheme: light;
+
+  transition:
+    background-color 250ms ease,
+    color 250ms ease;
+}
+
+.tapko-admin[data-theme="dark"] {
+  --admin-bg: #111411;
+  --admin-panel: #1b201c;
+  --admin-header: rgba(22, 27, 23, 0.84);
+  --admin-input: #232a24;
+  --admin-text: #eef1e8;
+  --admin-muted: #a1aa9b;
+  --admin-border: #343d32;
+  --admin-accent: #cdde54;
+  --admin-soft: #2b3420;
+  --admin-glow-a: rgba(157, 180, 65, 0.1);
+  --admin-glow-b: rgba(75, 128, 113, 0.1);
+
+  color-scheme: dark;
+}
+
+/* خلفية هادية متحركة */
+.tapko-admin::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 12% 15%,
+      var(--admin-glow-a),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 88% 75%,
+      var(--admin-glow-b),
+      transparent 48%
+    );
+
+  animation: tapko-ambient 16s ease-in-out infinite alternate;
+}
+
+/* الهيدر */
+.tapko-admin[data-theme] > header.bg-white {
+  position: relative;
+  z-index: 2;
+  background-color: var(--admin-header);
+  border-color: var(--admin-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* الأسطح */
+.tapko-admin[data-theme] .bg-white {
+  background-color: var(--admin-panel);
+}
+
+.tapko-admin[data-theme] :is(
+  .bg-stone-50,
+  .bg-stone-100
+) {
+  background-color: var(--admin-input);
+}
+
+.tapko-admin[data-theme] .bg-\[\#F2F5E5\] {
+  background-color: var(--admin-soft);
+}
+
+/* النصوص */
+.tapko-admin[data-theme] :is(
+  .text-stone-900,
+  .text-stone-800,
+  .text-stone-700
+) {
+  color: var(--admin-text);
+}
+
+.tapko-admin[data-theme] :is(
+  .text-stone-600,
+  .text-stone-500,
+  .text-stone-400
+) {
+  color: var(--admin-muted);
+}
+
+.tapko-admin[data-theme] .text-\[\#849225\] {
+  color: var(--admin-accent);
+}
+
+/* الحدود */
+.tapko-admin[data-theme] :is(
+  .border-stone-100,
+  .border-stone-200,
+  .border-stone-200\/70,
+  .border-stone-200\/80
+) {
+  border-color: var(--admin-border);
+}
+
+.tapko-admin[data-theme] .divide-stone-100 > :not(:last-child) {
+  border-color: var(--admin-border);
+}
+
+/* بادجات الحالات ورسائل الأخطاء في الدارك */
+.tapko-admin[data-theme="dark"] .bg-green-50 {
+  background-color: #20372b;
+}
+
+.tapko-admin[data-theme="dark"] .text-green-700 {
+  color: #a1ddb4;
+}
+
+.tapko-admin[data-theme="dark"] .bg-amber-50 {
+  background-color: #3b3220;
+}
+
+.tapko-admin[data-theme="dark"] .text-amber-700 {
+  color: #e9cc89;
+}
+
+.tapko-admin[data-theme="dark"] .bg-red-50 {
+  background-color: #3c2526;
+}
+
+.tapko-admin[data-theme="dark"] .text-red-700 {
+  color: #f0aaa7;
+}
+
+/* انتقالات الألوان والتفاعل */
+.tapko-admin :is(
+  header,
+  section,
+  input,
+  textarea,
+  select,
+  button,
+  a,
+  span
+) {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+/* ظهور عناصر المحتوى */
+.admin-main > * {
+  animation: tapko-enter 450ms ease both;
+}
+
+.admin-main > :nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.admin-main > :nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.admin-main > :nth-child(4) {
+  animation-delay: 180ms;
+}
+
+/* حركة أيقونة تغيير الوضع */
+.admin-theme-icon {
+  display: grid;
+  place-items: center;
+  animation: tapko-icon-enter 220ms ease both;
+}
+
+.admin-theme-toggle {
+  color: var(--admin-accent);
+}
+
+/* المدخلات */
+.tapko-admin input::placeholder,
+.tapko-admin textarea::placeholder {
+  color: var(--admin-muted);
+  opacity: 0.65;
+}
+
+.tapko-admin :is(input, textarea, select):focus-visible {
+  outline: none;
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px var(--admin-soft);
+}
+
+.tapko-admin input[readonly] {
+  opacity: 0.65;
+}
+
+.tapko-admin :is(button, a):focus-visible {
+  outline: 2px solid var(--admin-accent);
+  outline-offset: 4px;
+}
+
+.tapko-admin summary:focus-visible {
+  outline: 2px solid var(--admin-accent);
+  outline-offset: 4px;
+}
+
+/* ضغط الأزرار */
+.tapko-admin button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.tapko-admin button:disabled {
+  cursor: wait;
+}
+
+/* الهوفر للأجهزة اللي بتدعمه */
+@media (hover: hover) {
+  .tapko-admin .admin-main > .grid > section:hover {
+    transform: translateY(-4px);
+    border-color: var(--admin-accent);
+    box-shadow: 0 12px 30px -20px rgba(0, 0, 0, 0.35);
+  }
+
+  .tapko-admin button:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+
+  .tapko-admin a:hover {
+    transform: translateY(-2px);
+  }
+
+  .tapko-admin .divide-y > div:hover {
+    background-color: var(--admin-input);
+  }
+}
+
+/* Animations */
+@keyframes tapko-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tapko-icon-enter {
+  from {
+    opacity: 0;
+    transform: rotate(-35deg) scale(0.7);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+@keyframes tapko-ambient {
+  from {
+    opacity: 0.65;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-18px);
+  }
+}
+
+/* احترام إعداد تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .tapko-admin,
+  .tapko-admin *,
+  .tapko-admin::before,
+  .tapko-admin::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
